@@ -266,11 +266,11 @@ public class MainDraw implements IChartDraw<ICandle> {
 
         ICandle point = (ICandle) view.getItem(index);
         List<String> strings = new ArrayList<>();
-        strings.add(view.getAdapter().getDate(index));
-        strings.add("高:" + point.getHighPrice());
-        strings.add("低:" + point.getLowPrice());
-        strings.add("开:" + point.getOpenPrice());
-        strings.add("收:" + point.getClosePrice());
+        strings.add("Time:" + view.getAdapter().getDate(index));
+        strings.add("High:" + point.getHighPrice());
+        strings.add("Low:" + point.getLowPrice());
+        strings.add("Open:" + point.getOpenPrice());
+        strings.add("Close:" + point.getClosePrice());
 
         for (String s : strings) {
             width = Math.max(width, mSelectorTextPaint.measureText(s));

@@ -19,9 +19,9 @@ class MainActivity : AppCompatActivity() {
     private val adapter by lazy { KLineChartAdapter() }
 
     private val subTexts: ArrayList<TextView> by lazy { arrayListOf(macdText, kdjText, rsiText, wrText) }
-    // 主图指标下标
+    // Main chart index subscript
     private var mainIndex = 0
-    // 副图指标下标
+    // Sub-picture index subscript
     private var subIndex = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
