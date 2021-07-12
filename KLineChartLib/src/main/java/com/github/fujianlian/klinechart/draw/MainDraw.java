@@ -39,6 +39,8 @@ public class MainDraw implements IChartDraw<ICandle> {
 
     private Paint mSelectorTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mSelectorBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private String mSelectorOpenTitle = "Open", mSelectorCloseTitle = "Close", mSelectorHighTitle = "High", mSelectorLowTitle = "Low",
+            mSelectorTimeTitle = "Time";
     private Context mContext;
 
     private boolean mCandleSolid = true;
@@ -266,11 +268,11 @@ public class MainDraw implements IChartDraw<ICandle> {
 
         ICandle point = (ICandle) view.getItem(index);
         List<String> strings = new ArrayList<>();
-        strings.add("Time:" + view.getAdapter().getDate(index));
-        strings.add("High:" + point.getHighPrice());
-        strings.add("Low:" + point.getLowPrice());
-        strings.add("Open:" + point.getOpenPrice());
-        strings.add("Close:" + point.getClosePrice());
+        strings.add(mSelectorTimeTitle + ":" + view.getAdapter().getDate(index));
+        strings.add(mSelectorHighTitle + ":" + point.getHighPrice());
+        strings.add(mSelectorLowTitle + ":" + point.getLowPrice());
+        strings.add(mSelectorOpenTitle + ":" + point.getOpenPrice());
+        strings.add(mSelectorCloseTitle + ":" + point.getClosePrice());
 
         for (String s : strings) {
             width = Math.max(width, mSelectorTextPaint.measureText(s));
@@ -391,6 +393,26 @@ public class MainDraw implements IChartDraw<ICandle> {
      */
     public void setCandleSolid(boolean candleSolid) {
         mCandleSolid = candleSolid;
+    }
+
+    public void setSelectorOpenTitle(String mSelectorOpenTitle) {
+        this.mSelectorOpenTitle = mSelectorOpenTitle;
+    }
+
+    public void setSelectorCloseTitle(String mSelectorCloseTitle) {
+        this.mSelectorCloseTitle = mSelectorCloseTitle;
+    }
+
+    public void setSelectorHighTitle(String mSelectorHighTitle) {
+        this.mSelectorHighTitle = mSelectorHighTitle;
+    }
+
+    public void setSelectorLowTitle(String mSelectorLowTitle) {
+        this.mSelectorLowTitle = mSelectorLowTitle;
+    }
+
+    public void setSelectorTimeTitle(String mSelectorTimeTitle) {
+        this.mSelectorTimeTitle = mSelectorTimeTitle;
     }
 
     public void setLine(boolean line) {

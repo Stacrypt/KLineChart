@@ -353,6 +353,26 @@ public class KLineChartView extends BaseKLineChartView {
         mMainDraw.setSelectorBackgroundColor(color);
     }
 
+    public void setSelectorOpenTitle(String SelectorOpenTitle) {
+        mMainDraw.setSelectorOpenTitle(SelectorOpenTitle);
+    }
+
+    public void setSelectorCloseTitle(String SelectorCloseTitle) {
+        mMainDraw.setSelectorCloseTitle(SelectorCloseTitle);
+    }
+
+    public void setSelectorHighTitle(String SelectorHighTitle) {
+        mMainDraw.setSelectorHighTitle(SelectorHighTitle);
+    }
+
+    public void setSelectorLowTitle(String SelectorLowTitle) {
+        mMainDraw.setSelectorLowTitle(SelectorLowTitle);
+    }
+
+    public void setSelectorTimeTitle(String SelectorTimeTitle) {
+        mMainDraw.setSelectorTimeTitle(SelectorTimeTitle);
+    }
+
     /**
      * 设置蜡烛宽度
      *
