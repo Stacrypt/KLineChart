@@ -10,8 +10,6 @@ import com.github.fujianlian.klinechart.KLineEntity
 import com.github.fujianlian.klinechart.draw.Status
 import com.github.fujianlian.klinechart.formatter.DateFormatter
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.textColor
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -39,15 +37,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun initData() {
         kLineChartView.justShowLoading()
-        doAsync {
-            datas = DataRequest.getALL(this@MainActivity).subList(0, 500)
-            DataHelper.calculate(datas)
-            runOnUiThread {
-                adapter.addFooterData(datas)
-                adapter.notifyDataSetChanged()
-                kLineChartView.startAnimation()
-                kLineChartView.refreshEnd()
-            }
+        datas = DataRequest.getALL(this@MainActivity).subList(0, 500)
+        DataHelper.calculate(datas)
+        runOnUiThread {
+            adapter.addFooterData(datas)
+            adapter.notifyDataSetChanged()
+            kLineChartView.startAnimation()
+            kLineChartView.refreshEnd()
         }
     }
 
@@ -56,8 +52,8 @@ class MainActivity : AppCompatActivity() {
             if (mainIndex != 0) {
                 kLineChartView.hideSelectData()
                 mainIndex = 0
-                maText.textColor = Color.parseColor("#eeb350")
-                bollText.textColor = Color.WHITE
+                maText.setTextColor(Color.parseColor("#eeb350"))
+                bollText.setTextColor(Color.WHITE)
                 kLineChartView.changeMainDrawType(Status.MA)
             }
         }
@@ -65,8 +61,8 @@ class MainActivity : AppCompatActivity() {
             if (mainIndex != 1) {
                 kLineChartView.hideSelectData()
                 mainIndex = 1
-                bollText.textColor = Color.parseColor("#eeb350")
-                maText.textColor = Color.WHITE
+                bollText.setTextColor(Color.parseColor("#eeb350"))
+                maText.setTextColor(Color.WHITE)
                 kLineChartView.changeMainDrawType(Status.BOLL)
             }
         }
@@ -74,8 +70,8 @@ class MainActivity : AppCompatActivity() {
             if (mainIndex != -1) {
                 kLineChartView.hideSelectData()
                 mainIndex = -1
-                bollText.textColor = Color.WHITE
-                maText.textColor = Color.WHITE
+                bollText.setTextColor(Color.WHITE)
+                maText.setTextColor(Color.WHITE)
                 kLineChartView.changeMainDrawType(Status.NONE)
             }
         }
@@ -84,10 +80,10 @@ class MainActivity : AppCompatActivity() {
                 if (subIndex != index) {
                     kLineChartView.hideSelectData()
                     if (subIndex != -1) {
-                        subTexts[subIndex].textColor = Color.WHITE
+                        subTexts[subIndex].setTextColor(Color.WHITE)
                     }
                     subIndex = index
-                    text.textColor = Color.parseColor("#eeb350")
+                    text.setTextColor(Color.parseColor("#eeb350"))
                     kLineChartView.setChildDraw(subIndex)
                 }
             }
@@ -95,21 +91,21 @@ class MainActivity : AppCompatActivity() {
         subHide.setOnClickListener {
             if (subIndex != -1) {
                 kLineChartView.hideSelectData()
-                subTexts[subIndex].textColor = Color.WHITE
+                subTexts[subIndex].setTextColor(Color.WHITE)
                 subIndex = -1
                 kLineChartView.hideChildDraw()
             }
         }
         fenText.setOnClickListener {
             kLineChartView.hideSelectData()
-            fenText.textColor = Color.parseColor("#eeb350")
-            kText.textColor = Color.WHITE
+            fenText.setTextColor(Color.parseColor("#eeb350"))
+            kText.setTextColor(Color.WHITE)
             kLineChartView.setMainDrawLine(true)
         }
         kText.setOnClickListener {
             kLineChartView.hideSelectData()
-            kText.textColor = Color.parseColor("#eeb350")
-            fenText.textColor = Color.WHITE
+            kText.setTextColor(Color.parseColor("#eeb350"))
+            fenText.setTextColor(Color.WHITE)
             kLineChartView.setMainDrawLine(false)
         }
     }
