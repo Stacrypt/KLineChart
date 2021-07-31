@@ -20,6 +20,7 @@ import com.github.fujianlian.klinechart.base.IValueFormatter;
 import com.github.fujianlian.klinechart.draw.MainDraw;
 import com.github.fujianlian.klinechart.draw.Status;
 import com.github.fujianlian.klinechart.entity.IKLine;
+import com.github.fujianlian.klinechart.formatter.BigValueFormatter;
 import com.github.fujianlian.klinechart.formatter.TimeFormatter;
 import com.github.fujianlian.klinechart.formatter.ValueFormatter;
 import com.github.fujianlian.klinechart.utils.ViewUtil;
@@ -492,12 +493,12 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         if (!mainDraw.isLine()) {
             IKLine maxEntry = null, minEntry = null;
             boolean firstInit = true;
-
+            BigValueFormatter formatter = new BigValueFormatter();
 
             //绘制最大值和最小值
             float x = translateXtoX(getX(mMainMinIndex));
             float y = getMainY(mMainLowMinValue);
-            String LowString = "── " + Float.toString(mMainLowMinValue);
+            String LowString = "── " + formatter.format(mMainLowMinValue);
             //计算显示位置
             //计算文本宽度
             int lowStringWidth = calculateMaxMin(LowString).width();
@@ -507,14 +508,14 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
                 canvas.drawText(LowString, x, y + lowStringHeight / 2, mMaxMinPaint);
             } else {
                 //画左边
-                LowString = Float.toString(mMainLowMinValue) + " ──";
+                LowString = formatter.format(mMainLowMinValue) + " ──";
                 canvas.drawText(LowString, x - lowStringWidth, y + lowStringHeight / 2, mMaxMinPaint);
             }
 
             x = translateXtoX(getX(mMainMaxIndex));
             y = getMainY(mMainHighMaxValue);
 
-            String highString = "── " + Float.toString(mMainHighMaxValue);
+            String highString = "── " + formatter.format(mMainHighMaxValue);
             int highStringWidth = calculateMaxMin(highString).width();
             int highStringHeight = calculateMaxMin(highString).height();
             if (x < getWidth() / 2) {
@@ -522,7 +523,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
                 canvas.drawText(highString, x, y + highStringHeight / 2, mMaxMinPaint);
             } else {
                 //画左边
-                highString = Float.toString(mMainHighMaxValue) + " ──";
+                highString = formatter.format(mMainHighMaxValue) + " ──";
                 canvas.drawText(highString, x - highStringWidth, y + highStringHeight / 2, mMaxMinPaint);
             }
 
