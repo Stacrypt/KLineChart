@@ -3,6 +3,7 @@ package com.github.fujianlian.klinechart;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -149,6 +150,8 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
 
     private float mLineWidth;
 
+    private Bitmap watermark;
+
     public BaseKLineChartView(Context context) {
         super(context);
         init();
@@ -221,6 +224,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         if (mWidth == 0 || mMainRect.height() == 0 || mItemCount == 0) {
             return;
         }
+        drawWatermark(canvas);
         calculateValue();
         canvas.save();
         canvas.scale(1, 1);
@@ -230,6 +234,13 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         drawMaxAndMin(canvas);
         drawValue(canvas, isLongPress ? mSelectedIndex : mStopIndex);
         canvas.restore();
+    }
+
+    private void drawWatermark(Canvas canvas) {
+        if (watermark == null) return;
+        int xPosition = mMainRect.left + mBottomPadding;
+        int yPosition = mMainRect.bottom - mBottomPadding - watermark.getHeight();
+        canvas.drawBitmap(watermark, xPosition, yPosition, null);
     }
 
     public float getMainY(float value) {
@@ -1253,6 +1264,14 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
      */
     public void setSelectPointColor(int color) {
         mSelectPointPaint.setColor(color);
+    }
+
+    public void setWatermark(Bitmap watermark) {
+        this.watermark = watermark;
+    }
+
+    public Bitmap getWatermark() {
+        return watermark;
     }
 
     /**
