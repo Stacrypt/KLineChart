@@ -61,7 +61,6 @@ public class MainDraw implements IChartDraw<ICandle> {
         ma5Paint.setTypeface(kChartView.getTypeface());
         ma10Paint.setTypeface(kChartView.getTypeface());
         ma30Paint.setTypeface(kChartView.getTypeface());
-        mSelectorTextPaint.setTypeface(kChartView.getTypeface());
     }
 
     public void setStatus(Status status) {
@@ -296,6 +295,7 @@ public class MainDraw implements IChartDraw<ICandle> {
         canvas.drawRoundRect(r, padding, padding, mSelectorBackgroundPaint);
         float y = top + padding * 2 + (textHeight - metrics.bottom - metrics.top) / 2;
 
+        mSelectorTextPaint.setTypeface(view.getTypeface());
         for (String s : strings) {
             canvas.drawText(s, left + padding, y, mSelectorTextPaint);
             y += textHeight + padding;
