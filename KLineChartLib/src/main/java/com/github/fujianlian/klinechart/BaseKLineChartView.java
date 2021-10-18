@@ -1315,6 +1315,10 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         mSelectPointPaint.setColor(color);
     }
 
+    public void setSelectorFrameColor(int color) {
+        mSelectorFramePaint.setColor(color);
+    }
+
     public void setWatermark(Bitmap watermark) {
         this.watermark = watermark;
     }
