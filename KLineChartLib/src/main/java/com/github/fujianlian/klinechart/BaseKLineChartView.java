@@ -232,6 +232,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         drawK(canvas);
         drawText(canvas);
         drawMaxAndMin(canvas);
+        drawLastValue(canvas);
         drawValue(canvas, isLongPress ? mSelectedIndex : mStopIndex);
         canvas.restore();
     }
@@ -330,23 +331,23 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
                 mChildDraw.drawTranslated(lastPoint, currentPoint, lastX, currentPointX, canvas, this, i);
             }
         }
-        //画选择线
+        //Draw selection line
         if (isLongPress) {
             IKLine point = (IKLine) getItem(mSelectedIndex);
             float x = getX(mSelectedIndex);
             float y = getMainY(point.getClosePrice());
-            // k线图竖线
+            // k-line graph vertical line
             canvas.drawLine(x, mMainRect.top, x, mMainRect.bottom, mSelectedYLinePaint);
-            // k线图横线
+            // k-line graph horizontal line
             canvas.drawLine(-mTranslateX, y, -mTranslateX + mWidth / mScaleX, y, mSelectedXLinePaint);
-            // 柱状图竖线
+            // Vertical bar in histogram
             canvas.drawLine(x, mMainRect.bottom, x, mVolRect.bottom, mSelectedYLinePaint);
             if (mChildDraw != null) {
-                // 子线图竖线
+                // Sub-line graph vertical line
                 canvas.drawLine(x, mVolRect.bottom, x, mChildRect.bottom, mSelectedYLinePaint);
             }
         }
-        //还原 平移缩放
+        //Restore pan and zoom
         canvas.restore();
     }
 
@@ -381,7 +382,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         Paint.FontMetrics fm = mTextPaint.getFontMetrics();
         float textHeight = fm.descent - fm.ascent;
         float baseLine = (textHeight - fm.bottom - fm.top) / 2;
-        //--------------画上方k线图的值-------------
+        //--------------Draw the value of the bar graph above-------------
         if (mMainDraw != null) {
             canvas.drawText(formatValue(mMainMaxValue), mWidth - calculateWidth(formatValue(mMainMaxValue)), baseLine + mMainRect.top, mTextPaint);
             canvas.drawText(formatValue(mMainMinValue), mWidth - calculateWidth(formatValue(mMainMinValue)), mMainRect.bottom - textHeight + baseLine, mTextPaint);
@@ -392,21 +393,21 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
                 canvas.drawText(text, mWidth - calculateWidth(text), fixTextY(rowSpace * i + mMainRect.top), mTextPaint);
             }
         }
-        //--------------画中间子图的值-------------
+        //--------------Draw the value of the middle subgraph-------------
         if (mVolDraw != null) {
             canvas.drawText(mVolDraw.getValueFormatter().format(mVolMaxValue),
                     mWidth - calculateWidth(formatValue(mVolMaxValue)), mMainRect.bottom + baseLine, mTextPaint);
             /*canvas.drawText(mVolDraw.getValueFormatter().format(mVolMinValue),
                     mWidth - calculateWidth(formatValue(mVolMinValue)), mVolRect.bottom, mTextPaint);*/
         }
-        //--------------画下方子图的值-------------
+        //--------------Draw the value of the subgraph below-------------
         if (mChildDraw != null) {
             canvas.drawText(mChildDraw.getValueFormatter().format(mChildMaxValue),
                     mWidth - calculateWidth(formatValue(mChildMaxValue)), mVolRect.bottom + baseLine, mTextPaint);
             /*canvas.drawText(mChildDraw.getValueFormatter().format(mChildMinValue),
                     mWidth - calculateWidth(formatValue(mChildMinValue)), mChildRect.bottom, mTextPaint);*/
         }
-        //--------------画时间---------------------
+        //--------------Draw time---------------------
         float columnSpace = mWidth / mGridColumns;
         float y;
         if (isShowChild) {
@@ -437,7 +438,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
             canvas.drawText(text, mWidth - mTextPaint.measureText(text), y, mTextPaint);
         }
         if (isLongPress) {
-            // 画Y值
+            // Draw Y value
             IKLine point = (IKLine) getItem(mSelectedIndex);
             float w1 = ViewUtil.Dp2Px(getContext(), 5);
             float w2 = ViewUtil.Dp2Px(getContext(), 3);
@@ -506,19 +507,19 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
             boolean firstInit = true;
             BigValueFormatter formatter = new BigValueFormatter();
 
-            //绘制最大值和最小值
+            //Plot the maximum and minimum values
             float x = translateXtoX(getX(mMainMinIndex));
             float y = getMainY(mMainLowMinValue);
             String LowString = "── " + formatter.format(mMainLowMinValue);
-            //计算显示位置
-            //计算文本宽度
+            //Calculate display position
+            //Calculate text width
             int lowStringWidth = calculateMaxMin(LowString).width();
             int lowStringHeight = calculateMaxMin(LowString).height();
             if (x < getWidth() / 2) {
-                //画右边
+                //Draw right
                 canvas.drawText(LowString, x, y + lowStringHeight / 2, mMaxMinPaint);
             } else {
-                //画左边
+                //Draw left
                 LowString = formatter.format(mMainLowMinValue) + " ──";
                 canvas.drawText(LowString, x - lowStringWidth, y + lowStringHeight / 2, mMaxMinPaint);
             }
@@ -530,10 +531,10 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
             int highStringWidth = calculateMaxMin(highString).width();
             int highStringHeight = calculateMaxMin(highString).height();
             if (x < getWidth() / 2) {
-                //画右边
+                //Draw right
                 canvas.drawText(highString, x, y + highStringHeight / 2, mMaxMinPaint);
             } else {
-                //画左边
+                //Draw left
                 highString = formatter.format(mMainHighMaxValue) + " ──";
                 canvas.drawText(highString, x - highStringWidth, y + highStringHeight / 2, mMaxMinPaint);
             }
@@ -541,11 +542,52 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         }
     }
 
+    private void drawLastValue(Canvas canvas) {
+        int lastIndex = mAdapter.getCount() - 1;
+        // Don't draw if the last index is visible
+        if (mStopIndex >= lastIndex) return;
+
+        // Draw horizontal line
+        canvas.save();
+        canvas.translate(mTranslateX * mScaleX, 0);
+        canvas.scale(mScaleX, 1);
+        IKLine point = (IKLine) getItem(lastIndex);
+        float y = (getMainY(point.getClosePrice()) < mMainRect.centerY()) ?
+                Math.max(getMainY(point.getClosePrice()), getMainY(mMainHighMaxValue)) :
+                Math.min(getMainY(point.getClosePrice()), getMainY(mMainMinValue));
+        // k-line graph horizontal line
+        canvas.drawLine(-mTranslateX, y, -mTranslateX + mWidth / mScaleX, y, mSelectedXLinePaint);
+        canvas.restore();
+
+        // Draw last value
+        Paint.FontMetrics fm = mTextPaint.getFontMetrics();
+        float textHeight = fm.descent - fm.ascent;
+        float w1 = ViewUtil.Dp2Px(getContext(), 5);
+        float w2 = ViewUtil.Dp2Px(getContext(), 3);
+        float r = textHeight / 2 + w2;
+        float x;
+        String text = formatValue(point.getClosePrice());
+        float textWidth = mTextPaint.measureText(text);
+        x = mMainRect.centerX() - textWidth;
+        Path path = new Path();
+        path.moveTo(x, y - r);
+        path.lineTo(x - w2, y);
+        path.lineTo(x, y + r);
+        path.lineTo(x + textWidth + 2 * w1, y + r);
+        path.lineTo(x + textWidth + 2 * w1 + w2, y);
+        path.lineTo(x + textWidth + 2 * w1, y - r);
+        path.close();
+        canvas.drawPath(path, mSelectPointPaint);
+        canvas.drawPath(path, mSelectorFramePaint);
+        canvas.drawText(text, x + w1, fixTextY1(y), mTextPaint);
+
+    }
+
     /**
      * 画值
      *
      * @param canvas
-     * @param position 显示某个点的值
+     * @param position Display the value of a certain point
      */
     private void drawValue(Canvas canvas, int position) {
         Paint.FontMetrics fm = mTextPaint.getFontMetrics();
@@ -698,7 +740,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
             mMainMaxValue += padding;
             mMainMinValue -= padding;
         } else {
-            //当最大值和最小值都相等的时候 分别增大最大值和 减小最小值
+            //When the maximum and minimum values are equal, increase the maximum value and decrease the minimum value respectively
             mMainMaxValue += Math.abs(mMainMaxValue * 0.05f);
             mMainMinValue -= Math.abs(mMainMinValue * 0.05f);
             if (mMainMaxValue == 0) {
@@ -713,7 +755,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         if (Math.abs(mChildMaxValue) < 0.01 && Math.abs(mChildMinValue) < 0.01) {
             mChildMaxValue = 1f;
         } else if (mChildMaxValue.equals(mChildMinValue)) {
-            //当最大值和最小值都相等的时候 分别增大最大值和 减小最小值
+            //When the maximum and minimum values are equal, increase the maximum value and decrease the minimum value respectively
             mChildMaxValue += Math.abs(mChildMaxValue * 0.05f);
             mChildMinValue -= Math.abs(mChildMinValue * 0.05f);
             if (mChildMaxValue == 0) {
@@ -826,7 +868,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     }
 
     /**
-     * 根据索引获取实体
+     * Get entities based on index
      *
      * @param position 索引值
      * @return
@@ -1071,7 +1113,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     }
 
     /**
-     * translateX转化为view中的x
+     * translateX Converted to x in the view
      *
      * @param translateX
      * @return
