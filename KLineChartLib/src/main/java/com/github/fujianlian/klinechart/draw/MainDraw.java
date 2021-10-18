@@ -15,6 +15,7 @@ import com.github.fujianlian.klinechart.base.IChartDraw;
 import com.github.fujianlian.klinechart.base.IValueFormatter;
 import com.github.fujianlian.klinechart.entity.ICandle;
 import com.github.fujianlian.klinechart.entity.IKLine;
+import com.github.fujianlian.klinechart.formatter.BigValueFormatter;
 import com.github.fujianlian.klinechart.formatter.ValueFormatter;
 import com.github.fujianlian.klinechart.utils.ViewUtil;
 
@@ -263,8 +264,8 @@ public class MainDraw implements IChartDraw<ICandle> {
         float textHeight = metrics.descent - metrics.ascent;
 
         int index = view.getSelectedIndex();
-        float padding = ViewUtil.Dp2Px(mContext, 5);
-        float margin = ViewUtil.Dp2Px(mContext, 5);
+        float padding = ViewUtil.Dp2Px(mContext, 8);
+        float margin = ViewUtil.Dp2Px(mContext, 8);
         float width = 0;
         float left;
         float top = margin + view.getTopPadding();
@@ -272,11 +273,12 @@ public class MainDraw implements IChartDraw<ICandle> {
 
         ICandle point = (ICandle) view.getItem(index);
         List<String> strings = new ArrayList<>();
-        strings.add(mSelectorTimeTitle + ":" + view.getAdapter().getDate(index));
-        strings.add(mSelectorHighTitle + ":" + point.getHighPrice());
-        strings.add(mSelectorLowTitle + ":" + point.getLowPrice());
-        strings.add(mSelectorOpenTitle + ":" + point.getOpenPrice());
-        strings.add(mSelectorCloseTitle + ":" + point.getClosePrice());
+        BigValueFormatter formatter = new BigValueFormatter();
+        strings.add(mSelectorTimeTitle + ": " + view.getAdapter().getDate(index));
+        strings.add(mSelectorHighTitle + ": " + formatter.format(point.getHighPrice()));
+        strings.add(mSelectorLowTitle + ": " + formatter.format(point.getLowPrice()));
+        strings.add(mSelectorOpenTitle + ": " + formatter.format(point.getOpenPrice()));
+        strings.add(mSelectorCloseTitle + ": " + formatter.format(point.getClosePrice()));
 
         for (String s : strings) {
             width = Math.max(width, mSelectorTextPaint.measureText(s));
