@@ -13,7 +13,7 @@ public class BigValueFormatter implements IValueFormatter{
 
     //必须是排好序的
     private int[] values={1000,1000000,100000000};
-    private String[] units={"k","m","b"};
+    private String[] units={"K","M","B"};
 
     @Override
     public String format(float value) {
