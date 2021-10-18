@@ -41,6 +41,8 @@ public class KDJDraw implements IChartDraw<IKDJ> {
     @Override
     public void drawText(@NonNull Canvas canvas, @NonNull BaseKLineChartView view, int position, float x, float y) {
         IKDJ point = (IKDJ) view.getItem(position);
+        mKPaint.setTypeface(view.getTypeface());
+        mDPaint.setTypeface(view.getTypeface());
         if (point.getK() != 0) {
             String text = "KDJ(14,1,3)  ";
             canvas.drawText(text, x, y, view.getTextPaint());

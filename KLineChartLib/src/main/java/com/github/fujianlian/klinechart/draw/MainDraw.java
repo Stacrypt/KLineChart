@@ -57,6 +57,10 @@ public class MainDraw implements IChartDraw<ICandle> {
         mGreenPaint.setColor(ContextCompat.getColor(context, R.color.chart_green));
         mLinePaint.setColor(ContextCompat.getColor(context, R.color.chart_line));
         paint.setColor(ContextCompat.getColor(context, R.color.chart_line_background));
+        ma5Paint.setTypeface(kChartView.getTypeface());
+        ma10Paint.setTypeface(kChartView.getTypeface());
+        ma30Paint.setTypeface(kChartView.getTypeface());
+        mSelectorTextPaint.setTypeface(kChartView.getTypeface());
     }
 
     public void setStatus(Status status) {

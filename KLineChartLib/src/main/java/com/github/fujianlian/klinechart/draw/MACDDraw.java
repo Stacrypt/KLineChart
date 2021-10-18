@@ -47,6 +47,9 @@ public class MACDDraw implements IChartDraw<IMACD> {
     @Override
     public void drawText(@NonNull Canvas canvas, @NonNull BaseKLineChartView view, int position, float x, float y) {
         IMACD point = (IMACD) view.getItem(position);
+        mDIFPaint.setTypeface(view.getTypeface());
+        mMACDPaint.setTypeface(view.getTypeface());
+        mDEAPaint.setTypeface(view.getTypeface());
         String text = "MACD(12,26,9)  ";
         canvas.drawText(text, x, y, view.getTextPaint());
         x += view.getTextPaint().measureText(text);

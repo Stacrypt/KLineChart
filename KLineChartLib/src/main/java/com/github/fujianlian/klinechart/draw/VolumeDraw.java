@@ -65,6 +65,8 @@ public class VolumeDraw implements IChartDraw<IVolume> {
     @Override
     public void drawText(
             @NonNull Canvas canvas, @NonNull BaseKLineChartView view, int position, float x, float y) {
+        ma5Paint.setTypeface(view.getTypeface());
+        ma10Paint.setTypeface(view.getTypeface());
         IVolume point = (IVolume) view.getItem(position);
         String text = "VOL:" + getValueFormatter().format(point.getVolume()) + "  ";
         canvas.drawText(text, x, y, view.getTextPaint());

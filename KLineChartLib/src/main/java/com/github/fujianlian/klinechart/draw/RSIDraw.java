@@ -35,6 +35,7 @@ public class RSIDraw implements IChartDraw<IRSI> {
     @Override
     public void drawText(@NonNull Canvas canvas, @NonNull BaseKLineChartView view, int position, float x, float y) {
         IRSI point = (IRSI) view.getItem(position);
+        mRSI1Paint.setTypeface(view.getTypeface());
         if (point.getRsi() != 0) {
             String text = "RSI(14)  ";
             canvas.drawText(text, x, y, view.getTextPaint());

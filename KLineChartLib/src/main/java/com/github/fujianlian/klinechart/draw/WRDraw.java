@@ -32,6 +32,7 @@ public class WRDraw implements IChartDraw<IWR> {
     @Override
     public void drawText(@NonNull Canvas canvas, @NonNull BaseKLineChartView view, int position, float x, float y) {
         IWR point = (IWR) view.getItem(position);
+        mRPaint.setTypeface(view.getTypeface());
         if (point.getR() != -10) {
             String text = "WR(14):";
             canvas.drawText(text, x, y, view.getTextPaint());

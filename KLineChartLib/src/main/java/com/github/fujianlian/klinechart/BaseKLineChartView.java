@@ -9,10 +9,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+
 import androidx.core.view.GestureDetectorCompat;
+
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+
 import com.github.fujianlian.klinechart.base.IAdapter;
 import com.github.fujianlian.klinechart.base.IChartDraw;
 import com.github.fujianlian.klinechart.base.IDateTimeFormatter;
@@ -24,6 +28,7 @@ import com.github.fujianlian.klinechart.formatter.BigValueFormatter;
 import com.github.fujianlian.klinechart.formatter.TimeFormatter;
 import com.github.fujianlian.klinechart.formatter.ValueFormatter;
 import com.github.fujianlian.klinechart.utils.ViewUtil;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -151,6 +156,8 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     private float mLineWidth;
 
     private Bitmap watermark;
+
+    private Typeface typeface;
 
     public BaseKLineChartView(Context context) {
         super(context);
@@ -1322,6 +1329,19 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
 
     public float getStartPadding() {
         return startPadding;
+    }
+
+    public Typeface getTypeface() {
+        return typeface;
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.typeface = typeface;
+        if (typeface != null) {
+            mMaxMinPaint.setTypeface(typeface);
+            mTextPaint.setTypeface(typeface);
+            invalidate();
+        }
     }
 
     /**
