@@ -13,7 +13,6 @@ import androidx.core.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-
 import com.github.fujianlian.klinechart.base.IAdapter;
 import com.github.fujianlian.klinechart.base.IChartDraw;
 import com.github.fujianlian.klinechart.base.IDateTimeFormatter;
@@ -25,7 +24,6 @@ import com.github.fujianlian.klinechart.formatter.BigValueFormatter;
 import com.github.fujianlian.klinechart.formatter.TimeFormatter;
 import com.github.fujianlian.klinechart.formatter.ValueFormatter;
 import com.github.fujianlian.klinechart.utils.ViewUtil;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +45,8 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     private int mChildPadding;
 
     private int mBottomPadding;
+
+    private Float startPadding = 100F;
 
     private float mMainScaleY = 1;
 
@@ -630,7 +630,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     }
 
     /**
-     * 重新计算并刷新线条
+     * Recalculate and refresh the line
      */
     public void notifyChanged() {
         if (isShowChild && mChildDrawPosition == -1) {
@@ -779,7 +779,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     }
 
     /**
-     * 获取平移的最小值
+     * Get the minimum value of translation
      *
      * @return
      */
@@ -788,7 +788,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     }
 
     /**
-     * 获取平移的最大值
+     * Get the maximum value of translation
      *
      * @return
      */
@@ -796,7 +796,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         if (!isFullScreen()) {
             return getMinTranslateX();
         }
-        return mPointWidth / 2;
+        return mPointWidth / 2 + startPadding;
     }
 
     @Override
@@ -888,7 +888,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
      * @return
      */
     public float getX(int position) {
-        return position * mPointWidth;
+        return position * mPointWidth - startPadding;
     }
 
     /**
@@ -939,7 +939,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     }
 
     /**
-     * scrollX 转换为 TranslateX
+     * scrollX Convert to TranslateX
      *
      * @param scrollX
      */
@@ -1188,7 +1188,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
     }
 
     /**
-     * 数据是否充满屏幕
+     * Does the data fill the screen
      *
      * @return
      */
@@ -1314,6 +1314,14 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
 
     public Bitmap getWatermark() {
         return watermark;
+    }
+
+    public void setStartPadding(float startPadding) {
+        this.startPadding = startPadding;
+    }
+
+    public float getStartPadding() {
+        return startPadding;
     }
 
     /**
