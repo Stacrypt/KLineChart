@@ -399,6 +399,8 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
                 String text = formatValue(rowValue * (mGridRows - i) + mMainMinValue);
                 canvas.drawText(text, mWidth - calculateWidth(text), fixTextY(rowSpace * i + mMainRect.top), mTextPaint);
             }
+            // Set start padding based on Y axis value length
+            startPadding = (float) calculateWidth(formatValue(mMainMaxValue)) + 50;
         }
         //--------------Draw the value of the middle subgraph-------------
         if (mVolDraw != null) {
@@ -1325,10 +1327,6 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
 
     public Bitmap getWatermark() {
         return watermark;
-    }
-
-    public void setStartPadding(float startPadding) {
-        this.startPadding = startPadding;
     }
 
     public float getStartPadding() {
