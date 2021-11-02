@@ -51,7 +51,9 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
 
     private int mBottomPadding;
 
-    private Float startPadding = 100F;
+    private float startPadding = 100F;
+
+    private float yAxisMaxLabelLength = 0F;
 
     private float mMainScaleY = 1;
 
@@ -290,20 +292,25 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
      */
     private void drawGird(Canvas canvas) {
         //-----------------------上方k线图------------------------
-        //横向的grid
+        //Horizontal grid
         float rowSpace = mMainRect.height() / mGridRows;
         for (int i = 0; i <= mGridRows; i++) {
             canvas.drawLine(0, rowSpace * i + mMainRect.top, mWidth, rowSpace * i + mMainRect.top, mGridPaint);
         }
-        //-----------------------下方子图------------------------
+        //-----------------------Subgraph below------------------------
         if (mChildDraw != null) {
             canvas.drawLine(0, mVolRect.bottom, mWidth, mVolRect.bottom, mGridPaint);
             canvas.drawLine(0, mChildRect.bottom, mWidth, mChildRect.bottom, mGridPaint);
         } else {
             canvas.drawLine(0, mVolRect.bottom, mWidth, mVolRect.bottom, mGridPaint);
         }
-        //纵向的grid
-        float columnSpace = mWidth / mGridColumns;
+
+        // Y value divider
+        float dividerXPosition = mWidth - yAxisMaxLabelLength - 20F;
+        canvas.drawLine(dividerXPosition, 0, dividerXPosition, mMainRect.bottom, mGridPaint);
+
+        //Vertical grid
+        float columnSpace = dividerXPosition / mGridColumns;
         for (int i = 1; i < mGridColumns; i++) {
             canvas.drawLine(columnSpace * i, 0, columnSpace * i, mMainRect.bottom, mGridPaint);
             canvas.drawLine(columnSpace * i, mMainRect.bottom, columnSpace * i, mVolRect.bottom, mGridPaint);
@@ -785,6 +792,13 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
             float value = (float) mAnimator.getAnimatedValue();
             mStopIndex = mStartIndex + Math.round(value * (mStopIndex - mStartIndex));
         }
+
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            IKLine point = (IKLine) getItem(i);
+            float maxValue = Math.max(yAxisMaxLabelLength, mMainDraw.getMaxValue(point));
+            yAxisMaxLabelLength = calculateWidth(formatValue(maxValue));
+        }
+
     }
 
     /**
