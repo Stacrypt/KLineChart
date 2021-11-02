@@ -1348,6 +1348,26 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         }
     }
 
+    public int getCandlePositiveColor() {
+        if (mainDraw == null) return 0;
+        return mainDraw.getCandlePositiveColor();
+    }
+
+    public void setCandlePositiveColor(int candlePositiveColor) {
+        if (mainDraw == null) return;
+        mainDraw.setCandlePositiveColor(candlePositiveColor);
+    }
+
+    public int getCandleNegativeColor() {
+        if (mainDraw == null) return 0;
+        return mainDraw.getCandleNegativeColor();
+    }
+
+    public void setCandleNegativeColor(int candleNegativeColor) {
+        if (mainDraw == null) return;
+        mainDraw.setCandleNegativeColor(candleNegativeColor);
+    }
+
     /**
      * 选中点变化时的监听
      */

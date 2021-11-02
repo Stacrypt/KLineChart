@@ -32,11 +32,13 @@ public class MainDraw implements IChartDraw<ICandle> {
     private float mCandleLineWidth = 0;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint mRedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mGreenPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint mRedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint ma5Paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint ma10Paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint ma30Paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private int candlePositiveColor, candleNegativeColor;
 
     private Paint mSelectorTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mSelectorBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -54,8 +56,8 @@ public class MainDraw implements IChartDraw<ICandle> {
         Context context = view.getContext();
         kChartView = (KLineChartView) view;
         mContext = context;
-        mRedPaint.setColor(ContextCompat.getColor(context, R.color.chart_red));
-        mGreenPaint.setColor(ContextCompat.getColor(context, R.color.chart_green));
+        mGreenPaint.setColor(kChartView.getCandlePositiveColor() != 0 ? kChartView.getCandlePositiveColor() : ContextCompat.getColor(context, R.color.chart_green));
+        mRedPaint.setColor(kChartView.getCandleNegativeColor() != 0 ? kChartView.getCandleNegativeColor() : ContextCompat.getColor(context, R.color.chart_red));
         mLinePaint.setColor(ContextCompat.getColor(context, R.color.chart_line));
         paint.setColor(ContextCompat.getColor(context, R.color.chart_line_background));
         ma5Paint.setTypeface(kChartView.getTypeface());
@@ -230,25 +232,25 @@ public class MainDraw implements IChartDraw<ICandle> {
         if (open > close) {
             //实心
             if (mCandleSolid) {
-                canvas.drawRect(x - r, close, x + r, open, mRedPaint);
-                canvas.drawRect(x - lineR, high, x + lineR, low, mRedPaint);
+                canvas.drawRect(x - r, close, x + r, open, mGreenPaint);
+                canvas.drawRect(x - lineR, high, x + lineR, low, mGreenPaint);
             } else {
-                mRedPaint.setStrokeWidth(mCandleLineWidth);
-                canvas.drawLine(x, high, x, close, mRedPaint);
-                canvas.drawLine(x, open, x, low, mRedPaint);
-                canvas.drawLine(x - r + lineR, open, x - r + lineR, close, mRedPaint);
-                canvas.drawLine(x + r - lineR, open, x + r - lineR, close, mRedPaint);
-                mRedPaint.setStrokeWidth(mCandleLineWidth * view.getScaleX());
-                canvas.drawLine(x - r, open, x + r, open, mRedPaint);
-                canvas.drawLine(x - r, close, x + r, close, mRedPaint);
+                mGreenPaint.setStrokeWidth(mCandleLineWidth);
+                canvas.drawLine(x, high, x, close, mGreenPaint);
+                canvas.drawLine(x, open, x, low, mGreenPaint);
+                canvas.drawLine(x - r + lineR, open, x - r + lineR, close, mGreenPaint);
+                canvas.drawLine(x + r - lineR, open, x + r - lineR, close, mGreenPaint);
+                mGreenPaint.setStrokeWidth(mCandleLineWidth * view.getScaleX());
+                canvas.drawLine(x - r, open, x + r, open, mGreenPaint);
+                canvas.drawLine(x - r, close, x + r, close, mGreenPaint);
             }
 
         } else if (open < close) {
-            canvas.drawRect(x - r, open, x + r, close, mGreenPaint);
-            canvas.drawRect(x - lineR, high, x + lineR, low, mGreenPaint);
-        } else {
-            canvas.drawRect(x - r, open, x + r, close + 1, mRedPaint);
+            canvas.drawRect(x - r, open, x + r, close, mRedPaint);
             canvas.drawRect(x - lineR, high, x + lineR, low, mRedPaint);
+        } else {
+            canvas.drawRect(x - r, open, x + r, close + 1, mGreenPaint);
+            canvas.drawRect(x - lineR, high, x + lineR, low, mGreenPaint);
         }
     }
 
@@ -434,5 +436,23 @@ public class MainDraw implements IChartDraw<ICandle> {
 
     public boolean isLine() {
         return isLine;
+    }
+
+    public int getCandlePositiveColor() {
+        return candlePositiveColor;
+    }
+
+    public void setCandlePositiveColor(int candlePositiveColor) {
+        this.candlePositiveColor = candlePositiveColor;
+        mGreenPaint.setColor(candlePositiveColor);
+    }
+
+    public int getCandleNegativeColor() {
+        return candleNegativeColor;
+    }
+
+    public void setCandleNegativeColor(int candleNegativeColor) {
+        this.candleNegativeColor = candleNegativeColor;
+        mRedPaint.setColor(candleNegativeColor);
     }
 }
