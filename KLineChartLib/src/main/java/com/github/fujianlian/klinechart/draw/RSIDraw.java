@@ -89,4 +89,10 @@ public class RSIDraw implements IChartDraw<IRSI> {
         mRSI3Paint.setTextSize(textSize);
         mRSI1Paint.setTextSize(textSize);
     }
+
+    @Override
+    public void setPositiveColor(int positiveColor) {}
+
+    @Override
+    public void setNegativeColor(int negativeColor) {}
 }

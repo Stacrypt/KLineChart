@@ -126,4 +126,14 @@ public class VolumeDraw implements IChartDraw<IVolume> {
         this.ma10Paint.setTextSize(textSize);
     }
 
+    @Override
+    public void setPositiveColor(int positiveColor) {
+        mGreenPaint.setColor(positiveColor);
+    }
+
+    @Override
+    public void setNegativeColor(int negativeColor) {
+        mRedPaint.setColor(negativeColor);
+    }
+
 }

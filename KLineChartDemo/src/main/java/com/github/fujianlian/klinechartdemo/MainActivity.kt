@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        kLineChartView.negativeColor = Color.CYAN
+        kLineChartView.positiveColor = Color.MAGENTA
         kLineChartView.adapter = adapter
         kLineChartView.dateTimeFormatter = DateFormatter()
         kLineChartView.setGridRows(4)

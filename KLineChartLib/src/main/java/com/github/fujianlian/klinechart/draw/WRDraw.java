@@ -77,4 +77,10 @@ public class WRDraw implements IChartDraw<IWR> {
     public void setTextSize(float textSize) {
         mRPaint.setTextSize(textSize);
     }
+
+    @Override
+    public void setPositiveColor(int positiveColor) {}
+
+    @Override
+    public void setNegativeColor(int negativeColor) {}
 }

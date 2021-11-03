@@ -113,4 +113,10 @@ public class KDJDraw implements IChartDraw<IKDJ> {
         mDPaint.setTextSize(textSize);
         mJPaint.setTextSize(textSize);
     }
+
+    @Override
+    public void setPositiveColor(int positiveColor) {}
+
+    @Override
+    public void setNegativeColor(int negativeColor) {}
 }

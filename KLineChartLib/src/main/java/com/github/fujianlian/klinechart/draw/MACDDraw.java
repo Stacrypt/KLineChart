@@ -144,4 +144,14 @@ public class MACDDraw implements IChartDraw<IMACD> {
         mDIFPaint.setTextSize(textSize);
         mMACDPaint.setTextSize(textSize);
     }
+
+    @Override
+    public void setPositiveColor(int positiveColor) {
+        mGreenPaint.setColor(positiveColor);
+    }
+
+    @Override
+    public void setNegativeColor(int negativeColor) {
+        mRedPaint.setColor(negativeColor);
+    }
 }

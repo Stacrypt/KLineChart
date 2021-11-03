@@ -38,8 +38,6 @@ public class MainDraw implements IChartDraw<ICandle> {
     private Paint ma10Paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint ma30Paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private int candlePositiveColor, candleNegativeColor;
-
     private Paint mSelectorTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mSelectorBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private String mSelectorOpenTitle = "Open", mSelectorCloseTitle = "Close", mSelectorHighTitle = "High", mSelectorLowTitle = "Low",
@@ -56,8 +54,8 @@ public class MainDraw implements IChartDraw<ICandle> {
         Context context = view.getContext();
         kChartView = (KLineChartView) view;
         mContext = context;
-        mGreenPaint.setColor(kChartView.getCandlePositiveColor() != 0 ? kChartView.getCandlePositiveColor() : ContextCompat.getColor(context, R.color.chart_green));
-        mRedPaint.setColor(kChartView.getCandleNegativeColor() != 0 ? kChartView.getCandleNegativeColor() : ContextCompat.getColor(context, R.color.chart_red));
+        mGreenPaint.setColor(ContextCompat.getColor(context, R.color.chart_green));
+        mRedPaint.setColor(ContextCompat.getColor(context, R.color.chart_red));
         mLinePaint.setColor(ContextCompat.getColor(context, R.color.chart_line));
         paint.setColor(ContextCompat.getColor(context, R.color.chart_line_background));
         ma5Paint.setTypeface(kChartView.getTypeface());
@@ -438,21 +436,13 @@ public class MainDraw implements IChartDraw<ICandle> {
         return isLine;
     }
 
-    public int getCandlePositiveColor() {
-        return candlePositiveColor;
+    @Override
+    public void setPositiveColor(int positiveColor) {
+        mGreenPaint.setColor(positiveColor);
     }
 
-    public void setCandlePositiveColor(int candlePositiveColor) {
-        this.candlePositiveColor = candlePositiveColor;
-        mGreenPaint.setColor(candlePositiveColor);
-    }
-
-    public int getCandleNegativeColor() {
-        return candleNegativeColor;
-    }
-
-    public void setCandleNegativeColor(int candleNegativeColor) {
-        this.candleNegativeColor = candleNegativeColor;
-        mRedPaint.setColor(candleNegativeColor);
+    @Override
+    public void setNegativeColor(int negativeColor) {
+        mRedPaint.setColor(negativeColor);
     }
 }

@@ -161,6 +161,8 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
 
     private Typeface typeface;
 
+    private int positiveColor, negativeColor;
+
     public BaseKLineChartView(Context context) {
         super(context);
         init();
@@ -1360,24 +1362,34 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         }
     }
 
-    public int getCandlePositiveColor() {
-        if (mainDraw == null) return 0;
-        return mainDraw.getCandlePositiveColor();
+    public int getPositiveColor() {
+        return positiveColor;
     }
 
-    public void setCandlePositiveColor(int candlePositiveColor) {
-        if (mainDraw == null) return;
-        mainDraw.setCandlePositiveColor(candlePositiveColor);
+    public void setPositiveColor(int positiveColor) {
+        this.positiveColor = positiveColor;
+        if (mainDraw != null)
+            mainDraw.setPositiveColor(positiveColor);
+        if (mVolDraw != null)
+            mVolDraw.setPositiveColor(positiveColor);
+        if (mChildDraws != null)
+            for (int i = 0; i < mChildDraws.size(); i++)
+                mChildDraws.get(i).setPositiveColor(positiveColor);
     }
 
-    public int getCandleNegativeColor() {
-        if (mainDraw == null) return 0;
-        return mainDraw.getCandleNegativeColor();
+    public int getNegativeColor() {
+        return negativeColor;
     }
 
-    public void setCandleNegativeColor(int candleNegativeColor) {
-        if (mainDraw == null) return;
-        mainDraw.setCandleNegativeColor(candleNegativeColor);
+    public void setNegativeColor(int negativeColor) {
+        this.negativeColor = negativeColor;
+        if (mainDraw != null)
+            mainDraw.setNegativeColor(negativeColor);
+        if (mVolDraw != null)
+            mVolDraw.setNegativeColor(negativeColor);
+        if (mChildDraws != null)
+            for (int i = 0; i < mChildDraws.size(); i++)
+                mChildDraws.get(i).setNegativeColor(negativeColor);
     }
 
     /**

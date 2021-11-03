@@ -55,4 +55,7 @@ public interface IChartDraw<T> {
      * 获取value格式化器
      */
     IValueFormatter getValueFormatter();
+
+    void setPositiveColor(int positiveColor);
+    void setNegativeColor(int negativeColor);
 }
