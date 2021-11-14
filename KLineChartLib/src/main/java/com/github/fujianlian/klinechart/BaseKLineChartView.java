@@ -52,6 +52,8 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
 
     private int mBottomPadding;
 
+    private int textPadding;
+
     private float startPadding = 100F;
 
     private float yAxisMaxLabelLength = 0F;
@@ -186,6 +188,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         mTopPadding = (int) getResources().getDimension(R.dimen.chart_top_padding);
         mChildPadding = (int) getResources().getDimension(R.dimen.child_top_padding);
         mBottomPadding = (int) getResources().getDimension(R.dimen.chart_bottom_padding);
+        textPadding = (int) getResources().getDimension(R.dimen.text_padding);
 
         mAnimator = ValueAnimator.ofFloat(0f, 1f);
         mAnimator.setDuration(mAnimationDuration);
@@ -246,7 +249,24 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         drawMaxAndMin(canvas);
         drawLastValue(canvas);
         drawValue(canvas, isLongPress ? mSelectedIndex : mStopIndex);
+        drawYAxisBackground(canvas);
         canvas.restore();
+    }
+
+    private void drawYAxisBackground(Canvas canvas) {
+        float maxText = Math.max(Math.max(calculateWidth(mVolDraw.getValueFormatter().format(mVolMaxValue)), yAxisMaxLabelLength), calculateWidth(formatValue(mChildMaxValue)));
+        float maxTextWidth = mWidth - maxText - textPadding;
+
+        // Draw a background for Y-axis labels
+        canvas.drawRect(maxTextWidth, 0, mWidth, mMainRect.bottom, mBackgroundPaint);
+
+        // Draw a background for Y-axis labels
+        if (mVolDraw != null)
+            canvas.drawRect(maxTextWidth, mVolRect.top, mWidth, mVolRect.bottom, mBackgroundPaint);
+
+        // Draw a background for Y-axis labels
+        if (mChildDraw != null)
+            canvas.drawRect(maxTextWidth, mChildRect.top, mWidth, mChildRect.bottom, mBackgroundPaint);
     }
 
     private void drawWatermark(Canvas canvas) {
@@ -309,7 +329,8 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         }
 
         // Y value divider
-        float dividerXPosition = mWidth - yAxisMaxLabelLength - 20F;
+        float maxText = Math.max(Math.max(calculateWidth(mVolDraw.getValueFormatter().format(mVolMaxValue)), yAxisMaxLabelLength), calculateWidth(formatValue(mChildMaxValue)));
+        float dividerXPosition = mWidth - maxText - textPadding;
         canvas.drawLine(dividerXPosition, 0, dividerXPosition, mMainRect.bottom, mGridPaint);
         if (mVolDraw != null)
             canvas.drawLine(dividerXPosition, mVolRect.top, dividerXPosition, mVolRect.bottom, mGridPaint);
@@ -403,13 +424,8 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         Paint.FontMetrics fm = mTextPaint.getFontMetrics();
         float textHeight = fm.descent - fm.ascent;
         float baseLine = (textHeight - fm.bottom - fm.top) / 2;
-        float maxTextWidth = mWidth - yAxisMaxLabelLength - 20;
         //--------------Draw the value of the bar graph above-------------
         if (mMainDraw != null) {
-
-            // Draw a background for Y-axis labels
-            canvas.drawRect(maxTextWidth, 0, mWidth, mMainRect.bottom, mBackgroundPaint);
-
             canvas.drawText(formatValue(mMainMaxValue), mWidth - calculateWidth(formatValue(mMainMaxValue)), baseLine + mMainRect.top, mTextPaint);
             canvas.drawText(formatValue(mMainMinValue), mWidth - calculateWidth(formatValue(mMainMinValue)), mMainRect.bottom - textHeight + baseLine, mTextPaint);
             float rowValue = (mMainMaxValue - mMainMinValue) / mGridRows;
@@ -425,17 +441,11 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         if (mVolDraw != null) {
             canvas.drawText(mVolDraw.getValueFormatter().format(mVolMaxValue),
                     mWidth - calculateWidth(mVolDraw.getValueFormatter().format(mVolMaxValue)), mMainRect.bottom + baseLine, mTextPaint);
-
-            // Draw a background for Y-axis labels
-            canvas.drawRect(maxTextWidth, mVolRect.top, mWidth, mVolRect.bottom, mBackgroundPaint);
         }
         //--------------Draw the value of the subgraph below-------------
         if (mChildDraw != null) {
             canvas.drawText(mChildDraw.getValueFormatter().format(mChildMaxValue),
                     mWidth - calculateWidth(formatValue(mChildMaxValue)), mVolRect.bottom + baseLine, mTextPaint);
-
-            // Draw a background for Y-axis labels
-            canvas.drawRect(maxTextWidth, mChildRect.top, mWidth, mChildRect.bottom, mBackgroundPaint);
         }
         //--------------Draw time---------------------
         float columnSpace = mWidth / mGridColumns;
