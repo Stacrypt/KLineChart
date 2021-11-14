@@ -12,6 +12,7 @@ import android.graphics.Rect;
 
 import androidx.core.view.GestureDetectorCompat;
 
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -310,6 +311,10 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         // Y value divider
         float dividerXPosition = mWidth - yAxisMaxLabelLength - 20F;
         canvas.drawLine(dividerXPosition, 0, dividerXPosition, mMainRect.bottom, mGridPaint);
+        if (mVolDraw != null)
+            canvas.drawLine(dividerXPosition, mVolRect.top, dividerXPosition, mVolRect.bottom, mGridPaint);
+        if (mChildDraw != null)
+            canvas.drawLine(dividerXPosition, mChildRect.top, dividerXPosition, mChildRect.bottom, mGridPaint);
 
         //Vertical grid
         float columnSpace = dividerXPosition / mGridColumns;
@@ -398,8 +403,13 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         Paint.FontMetrics fm = mTextPaint.getFontMetrics();
         float textHeight = fm.descent - fm.ascent;
         float baseLine = (textHeight - fm.bottom - fm.top) / 2;
+        float maxTextWidth = mWidth - yAxisMaxLabelLength - 20;
         //--------------Draw the value of the bar graph above-------------
         if (mMainDraw != null) {
+
+            // Draw a background for Y-axis labels
+            canvas.drawRect(maxTextWidth, 0, mWidth, mMainRect.bottom, mBackgroundPaint);
+
             canvas.drawText(formatValue(mMainMaxValue), mWidth - calculateWidth(formatValue(mMainMaxValue)), baseLine + mMainRect.top, mTextPaint);
             canvas.drawText(formatValue(mMainMinValue), mWidth - calculateWidth(formatValue(mMainMinValue)), mMainRect.bottom - textHeight + baseLine, mTextPaint);
             float rowValue = (mMainMaxValue - mMainMinValue) / mGridRows;
@@ -414,16 +424,18 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         //--------------Draw the value of the middle subgraph-------------
         if (mVolDraw != null) {
             canvas.drawText(mVolDraw.getValueFormatter().format(mVolMaxValue),
-                    mWidth - calculateWidth(formatValue(mVolMaxValue)), mMainRect.bottom + baseLine, mTextPaint);
-            /*canvas.drawText(mVolDraw.getValueFormatter().format(mVolMinValue),
-                    mWidth - calculateWidth(formatValue(mVolMinValue)), mVolRect.bottom, mTextPaint);*/
+                    mWidth - calculateWidth(mVolDraw.getValueFormatter().format(mVolMaxValue)), mMainRect.bottom + baseLine, mTextPaint);
+
+            // Draw a background for Y-axis labels
+            canvas.drawRect(maxTextWidth, mVolRect.top, mWidth, mVolRect.bottom, mBackgroundPaint);
         }
         //--------------Draw the value of the subgraph below-------------
         if (mChildDraw != null) {
             canvas.drawText(mChildDraw.getValueFormatter().format(mChildMaxValue),
                     mWidth - calculateWidth(formatValue(mChildMaxValue)), mVolRect.bottom + baseLine, mTextPaint);
-            /*canvas.drawText(mChildDraw.getValueFormatter().format(mChildMinValue),
-                    mWidth - calculateWidth(formatValue(mChildMinValue)), mChildRect.bottom, mTextPaint);*/
+
+            // Draw a background for Y-axis labels
+            canvas.drawRect(maxTextWidth, mChildRect.top, mWidth, mChildRect.bottom, mBackgroundPaint);
         }
         //--------------Draw time---------------------
         float columnSpace = mWidth / mGridColumns;
