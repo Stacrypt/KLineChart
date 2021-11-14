@@ -245,11 +245,11 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         canvas.scale(1, 1);
         drawGird(canvas);
         drawK(canvas);
-        drawText(canvas);
         drawMaxAndMin(canvas);
         drawLastValue(canvas);
         drawValue(canvas, isLongPress ? mSelectedIndex : mStopIndex);
         drawYAxisBackground(canvas);
+        drawText(canvas);
         canvas.restore();
     }
 
