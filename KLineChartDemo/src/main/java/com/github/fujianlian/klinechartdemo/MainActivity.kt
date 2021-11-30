@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         kLineChartView.dateTimeFormatter = DateFormatter()
         kLineChartView.setGridRows(4)
         kLineChartView.setGridColumns(4)
+        kLineChartView.setBackgroundColor(Color.DKGRAY)
         initData()
         initListener()
     }
