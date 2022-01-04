@@ -260,13 +260,13 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
         // Draw a background for Y-axis labels
         canvas.drawRect(maxTextWidth, 0, mWidth, mMainRect.bottom, mBackgroundPaint);
 
-        // Draw a background for Y-axis labels
+        // Draw a background for Vol labels
         if (mVolDraw != null)
-            canvas.drawRect(maxTextWidth, mVolRect.top, mWidth, mVolRect.bottom, mBackgroundPaint);
+            canvas.drawRect(maxTextWidth, mMainRect.bottom, mWidth, mVolRect.bottom, mBackgroundPaint);
 
-        // Draw a background for Y-axis labels
+        // Draw a background for Child view labels
         if (mChildDraw != null)
-            canvas.drawRect(maxTextWidth, mChildRect.top, mWidth, mChildRect.bottom, mBackgroundPaint);
+            canvas.drawRect(maxTextWidth, mVolRect.bottom, mWidth, mChildRect.bottom, mBackgroundPaint);
     }
 
     private void drawWatermark(Canvas canvas) {
