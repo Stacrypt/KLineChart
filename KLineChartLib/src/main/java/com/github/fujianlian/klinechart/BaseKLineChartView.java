@@ -831,7 +831,7 @@ public abstract class BaseKLineChartView extends ScrollAndScaleView {
      * @return
      */
     private float getMinTranslateX() {
-        return -mDataLen + mWidth / mScaleX - mPointWidth / 2;
+        return -mDataLen + mWidth / mScaleX - mPointWidth / 2 - startPadding;
     }
 
     /**
