@@ -91,9 +91,9 @@ public class MACDDraw implements IChartDraw<IMACD> {
         float zeroy = view.getChildY(0);
         if (macd > 0) {
             //               left   top   right  bottom
-            canvas.drawRect(x - r, macdy, x + r, zeroy, mRedPaint);
+            canvas.drawRect(x - r, macdy, x + r, zeroy, mGreenPaint);
         } else {
-            canvas.drawRect(x - r, zeroy, x + r, macdy, mGreenPaint);
+            canvas.drawRect(x - r, zeroy, x + r, macdy, mRedPaint);
         }
     }
 
